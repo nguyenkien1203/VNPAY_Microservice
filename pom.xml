@@ -20,6 +20,8 @@
         <module>profile-service</module>
         <module>table-service</module>
         <module>menu-service</module>
+        <module>eureka-service</module>
+        <module>config-service</module>
 
     </modules>
 
