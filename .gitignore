@@ -1,0 +1,8 @@
+# Gitignore for Java/Maven/Spring Boot
+.idea/
+.vscode/
+target/
+*.iml
+.mvn/
+*.jar
+*.log
