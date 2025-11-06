@@ -19,6 +19,7 @@
         <module>reservation-service</module>
         <module>profile-service</module>
         <module>table-service</module>
+        <module>menu-service</module>
 
     </modules>
 
