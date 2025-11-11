@@ -22,6 +22,7 @@
         <module>menu-service</module>
         <module>eureka-service</module>
         <module>config-service</module>
+        <module>common-service</module>
 
     </modules>
 
