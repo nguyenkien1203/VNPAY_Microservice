@@ -1,0 +1,14 @@
+plugins {
+    id 'java-library'
+    id 'io.spring.dependency-management'
+}
+
+dependencies {
+    // Các module nội bộ
+    api project(":common-module:cache")
+    api project(":common-module:utils")
+    api project(":common-module:data")
+
+    // Spring Data Commons
+    api "org.springframework.data:spring-data-commons"
+}

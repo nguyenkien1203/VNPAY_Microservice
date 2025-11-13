@@ -1,29 +1,115 @@
 plugins {
+    id 'java-library'
     id 'java'
-    id 'org.springframework.boot' version '3.5.7'
+    id 'idea'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.restaurant'
-version = '0.0.1-SNAPSHOT'
-description = 'VNPAY_Microservices'
+version = ''
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+ext {
+    /**
+     * commons-lang3
+     */
+    commonsLang3Version = "3.19.0"
+
+    /**
+     * log version
+     */
+    slf4jVersion = "2.1.0-alpha1"
+
+    /**
+     * lombok version
+     */
+    lombok_version = '1.18.42'
+
+    /**
+     * Jackson
+     */
+    jackson_version = '2.20.0'
+    jackson_dataformat_version = "2.20.0"
+    jackson_annotations_version = "3.0-rc5"
+
+    /**
+     * spring version
+     */
+    spring_dependency_management_version = '1.1.7'
+    spring_boot_version = '3.5.6'
+    spring_cloud_version = "2025.0.0"
+    spring_framework_version = '6.2.11'
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        mavenCentral()
     }
-}
 
-repositories {
-    mavenCentral()
-}
+    // Exclude Tomcat and add Jetty
+    configurations {
+        configureEach {
+            exclude group: 'commons-logging', module: 'commons-logging'
+            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-webflux'
+        }
+    }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
 
-tasks.named('test') {
-    useJUnitPlatform()
+    //bỏ không đóng gói các file này tỏng folder resource của project
+    tasks.withType(ProcessResources).configureEach {
+        exclude '/*.yaml'
+        exclude '/*.yml'
+        exclude '/config/*.yml'
+        exclude '/config/*.yaml'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:$spring_boot_version"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:$spring_cloud_version"
+        }
+    }
+
+    //những version dependence để ở đây
+    ext {
+
+    }
+
+    dependencies {
+        /**
+         * config
+         */
+        api "org.slf4j:slf4j-api:$slf4jVersion"
+
+        /**
+         * Lombok
+         */
+        compileOnly("org.projectlombok:lombok:$lombok_version")
+        annotationProcessor("org.projectlombok:lombok:$lombok_version")
+
+        /**
+         * Jackson
+         */
+        api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_dataformat_version")
+        api "com.fasterxml.jackson.core:jackson-annotations:$jackson_annotations_version"
+        api "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+        api "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jackson_version"
+
+        /**
+         * Apache commons
+         */
+        api "org.apache.commons:commons-lang3:$commonsLang3Version"
+    }
 }
